@@ -31,7 +31,7 @@ final class Version20190530221912 extends AbstractMigration
         }, $tables));
 
         array_map([$this, 'addSql'], \array_map(function (string $table) {
-            return sprintf('CREATE VIEW timetravel.%s AS SELECT * FROM %s UNION ALL SELECT * FROM history.%s', $table, $table, $table);
+            return sprintf('CREATE VIEW timetravel.%s AS SELECT * FROM %s WHERE sys_period @> current_setting(\'timetravel.timestamp\'::text)::timestamptz UNION ALL SELECT * FROM history.%s WHERE sys_period @> current_setting(\'timetravel.timestamp\'::text)::timestamptz;', $table, $table, $table);
         }, $tables));
 
         array_map([$this, 'addSql'], \array_map(function (string $table) {

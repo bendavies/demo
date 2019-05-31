@@ -34,8 +34,6 @@ class TimeTravelSubscriber implements EventSubscriberInterface
 
         $conn = $this->em->getConnection();
         $conn->exec('SET SEARCH_PATH TO timetravel;');
-        $filter = $this->em->getFilters()->enable('timetravel');
-
-        $filter->setParameter('timetravel', $backToTheFuture);
+        $conn->exec(sprintf('SET timetravel.timestamp=\'%s\';', $backToTheFuture));
     }
 }
